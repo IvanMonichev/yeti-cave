@@ -143,4 +143,9 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-
+function get_formatted_price($price): string
+{
+  $price = ceil($price);
+  $price = number_format($price, 0, ',', ' ');
+  return  $price . ' <b class="rub">р</b>';
+}

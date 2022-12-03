@@ -48,7 +48,21 @@ $goods = [
     "price" => 10999,
     "image" => "img/lot-6.jpg"
   ]
-]
+];
+
+/**
+ * Форматирует цену.
+ * @param number $price – изначальная цена
+ * @return string – отформатированная цена
+ */
+
+function get_formatted_price($price): string
+{
+  $price = ceil($price);
+  $price = number_format($price, 0, ',', ' ');
+  return  $price . ' <b class="rub">р</b>';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +125,7 @@ $goods = [
             <div class="lot__state">
               <div class="lot__rate">
                 <span class="lot__amount">Стартовая цена</span>
-                <span class="lot__cost"><?= $good["price"] ?><b class="rub">р</b></span>
+                <span class="lot__cost"><?= get_formatted_price($good["price"]) ?></span>
               </div>
               <div class="lot__timer timer">
                 12:23

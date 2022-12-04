@@ -5,8 +5,8 @@ CREATE DATABASE yeti_cave
 USE yeti_cave;
 CREATE TABLE categories (
    id INT AUTO_INCREMENT PRIMARY KEY,
-   name_category VARCHAR(128) NOT NULL,
-   character_code VARCHAR(128) UNIQUE
+   character_code VARCHAR(128) UNIQUE,
+   name_category VARCHAR(128) NOT NULL
 );
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,

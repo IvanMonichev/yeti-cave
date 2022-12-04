@@ -3,12 +3,12 @@ CREATE DATABASE yeti_cave
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 USE yeti_cave;
-CREATE TABLE category (
+CREATE TABLE categories (
    id INT AUTO_INCREMENT PRIMARY KEY,
    name_category VARCHAR(128) NOT NULL,
    character_code VARCHAR(128) UNIQUE
 );
-CREATE TABLE user (
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_registration TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     email VARCHAR(128) NOT NULL UNIQUE,
@@ -16,11 +16,11 @@ CREATE TABLE user (
     user_password CHAR(255),
     contacts TEXT
 );
-CREATE TABLE role (
+CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(128) UNIQUE
 );
-CREATE TABLE lot (
+CREATE TABLE lots (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lot_name VARCHAR(255) NOT NULL,
@@ -32,16 +32,16 @@ CREATE TABLE lot (
     user_id INT,
     winner_id INT,
     category_id INT,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (winner_id) REFERENCES user(id),
-    FOREIGN KEY (category_id) REFERENCES category(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (winner_id) REFERENCES users(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 );
-CREATE TABLE bet (
+CREATE TABLE bets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date_bet TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     price_bet INT,
     user_id INT,
     lot_id INT,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (lot_id) REFERENCES lot(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (lot_id) REFERENCES lots(id)
 );

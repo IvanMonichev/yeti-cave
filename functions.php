@@ -4,7 +4,7 @@ function get_formatted_price($price): string
 {
   $price = ceil($price);
   $price = number_format($price, 0, ',', ' ');
-  return  $price . ' <b class="rub">р</b>';
+  return $price . ' <b class="rub">р</b>';
 }
 
 
@@ -13,6 +13,7 @@ function get_time_left($date)
   $final_date = date_create($date);
   $cur_date = date_create("now");
   $diff = date_diff($final_date, $cur_date);
+
   $format_diff = date_interval_format($diff, "%d %H %I");
   $arr = explode(" ", $format_diff);
 
@@ -24,4 +25,6 @@ function get_time_left($date)
   $res[] = $minutes;
 
   return $res;
+
+
 }

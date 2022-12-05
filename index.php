@@ -1,8 +1,20 @@
 <?php
-require_once('config.php');
-require_once('helpers.php');
-require_once('functions.php');
-require_once('data.php');
+require_once 'init.php';
+
+if ($link) {
+  $error = mysqli_connect_error();
+  $content = include_template('error.php', ['error' => $error]);
+} else {
+  $sql = 'SELECT * FROM lots';
+  $result = mysqli_query($link, $sql);
+
+  if ($result) {
+    $goods = mysqli_fetch_all($result. MYSQLI_ASSOC);
+  } else {
+    $error = mysqli_connect_error();
+    $content = include_template('error.php', ['error' => $error]);
+  }
+}
 
 $page_content = include_template('main.php', [
   'categories' => $categories,

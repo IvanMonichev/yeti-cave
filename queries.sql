@@ -25,15 +25,15 @@ VALUES
     ('Маска Oakley Canopy', 'Желтые очки, все будет веселенькое', 'img/lot-6.jpg', 5400, '2021-08-15', 100, 1, 6);
 
 /*Получаем все категории*/
-SELECT name_category AS 'Категории' FROM categories;
+SELECT character_code AS 'Категории' FROM categories;
 
 
 /*--Получаем открытые лоты, в каждом получаем название, стартовую цену, ссылку на изображение, название категории*/
-SELECT lots.lot_name, lots.start_price, lots.image, categories.name_category
+SELECT lots.lot_name, lots.start_price, lots.image, categories.character_code
 FROM lots JOIN categories ON lots.category_id=categories.id;
 
 /*--Показываем лот по его ID и получаем название категории, к которой принадлежит лот*/
-SELECT lots.id, lots.data_creation, lots.lot_name, lots.lot_description, lots.image, lots.start_price, lots.data_finish, lots.step, categories.name_category
+SELECT lots.id, lots.data_creation, lots.lot_name, lots.lot_description, lots.image, lots.start_price, lots.data_finish, lots.step, categories.character_code
 FROM lots JOIN categories ON lots.category_id=categories.id
 WHERE lots.id=4;
 

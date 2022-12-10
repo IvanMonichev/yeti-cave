@@ -2,7 +2,6 @@
 require_once 'common/init.php';
 
 /** @var object $link */
-$categories = get_categories($link);
 $goods = get_lots($link);
 
 if ($categories && $goods) {
@@ -20,8 +19,6 @@ $layout_content = include_template('layout.php', [
   'categories' => $categories,
   'content' => $content,
 ]);
-
-
 
 print($layout_content);
 

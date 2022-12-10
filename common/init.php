@@ -13,3 +13,4 @@ if (!$link) {
 mysqli_set_charset($link, 'utf-8');
 $user_name = 'Иван';
 $title = "Yeti Cave";
+$categories = get_categories($link);

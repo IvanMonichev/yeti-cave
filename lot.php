@@ -1,13 +1,14 @@
 <?php
 require 'common/init.php';
 
-$categories = get_categories($link);
+
 
 $id_lot = intval($_GET['id']);
 $arr = get_lot_by_id($link, $id_lot);
 
 if ($result = get_lot_by_id($link, $id_lot)) {
   if (!mysqli_num_rows($result)) {
+    http_response_code(404);
     $content = show_error('Такого лота не существует');
   } else {
     $lot = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -17,6 +18,7 @@ if ($result = get_lot_by_id($link, $id_lot)) {
     ]);
   }
 } else {
+  http_response_code(404);
   $content = show_error();
 }
 

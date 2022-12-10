@@ -29,11 +29,24 @@ function get_time_left($date)
 
 }
 
+function show_error($error_text): string
+{
+  return include_template('error.php', [
+    'error' => $error_text ?? mysqli_error(),
+  ]);
+}
+
 function get_categories($link)
 {
-  $sql_categories = 'SELECT name_category, character_code FROM categories';
+  $sql_categories = 'SELECT * FROM categories';
   $result_categories = mysqli_query($link, $sql_categories);
-  return mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
+  if ($result_categories) {
+    return mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
+  } else {
+    $error = mysqli_error($link);
+    show_error($error);
+  }
+
 }
 
 function get_lots($link)
@@ -59,9 +72,7 @@ function get_lot_by_id($link, $id) {
   return mysqli_stmt_get_result($stmt);
 }
 
-function show_error($error_text): string
-{
-  return include_template('error.php', [
-    'error' => $error_text ?? mysqli_error(),
-  ]);
+function get_query_create_lot() {
+  return 'INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
 }

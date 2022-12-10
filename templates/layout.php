@@ -23,12 +23,14 @@
 
       <nav class="user-menu">
 
-        <?= "<span>htmlspecialchars($user_name)</span>"; ?>
+        <span><?= htmlspecialchars($user_name) ?></span>
 
       </nav>
     </div>
   </header>
+
   <?= $content; ?>
+
 </div>
 
 <footer class="main-footer">

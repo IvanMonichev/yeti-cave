@@ -39,10 +39,29 @@ function get_categories($link)
 function get_lots($link)
 {
   $sql_lots =
-    'SELECT l.data_creation, l.lot_name as name, l.image,
+    'SELECT l.id, l.data_creation, l.lot_name as name, l.image,
        l.start_price as price, l.data_finish as expiration, c.name_category as category
         FROM lots l JOIN categories c on l.category_id = c.id WHERE data_finish > NOW() ORDER BY data_creation DESC';
 
   $result_lots = mysqli_query($link, $sql_lots);
   return mysqli_fetch_all($result_lots, MYSQLI_ASSOC);
+}
+
+function get_lot_by_id($link, $id) {
+  $sql_lot = 'SELECT l.id, l.data_creation, l.lot_name as name, l.image, l.lot_description as description,
+                l.start_price as price, l.data_finish as expiration, c.name_category as category
+                FROM lots l JOIN categories c on l.category_id = c.id WHERE l.id = ?;';
+
+  $stmt = mysqli_prepare($link, $sql_lot);
+
+  mysqli_stmt_bind_param($stmt, 'i', $id);
+  mysqli_stmt_execute($stmt);
+  return mysqli_stmt_get_result($stmt);
+}
+
+function show_error($error_text): string
+{
+  return include_template('error.php', [
+    'error' => $error_text ?? mysqli_error(),
+  ]);
 }

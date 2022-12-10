@@ -60,7 +60,8 @@ function get_lots($link)
   return mysqli_fetch_all($result_lots, MYSQLI_ASSOC);
 }
 
-function get_lot_by_id($link, $id) {
+function get_lot_by_id($link, $id): bool|mysqli_result
+{
   $sql_lot = 'SELECT l.id, l.data_creation, l.lot_name as name, l.image, l.lot_description as description,
                 l.start_price as price, l.data_finish as expiration, c.name_category as category
                 FROM lots l JOIN categories c on l.category_id = c.id WHERE l.id = ?;';
@@ -72,7 +73,69 @@ function get_lot_by_id($link, $id) {
   return mysqli_stmt_get_result($stmt);
 }
 
-function get_query_create_lot() {
+function get_query_create_lot(): string
+{
   return 'INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id) 
             VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
+}
+
+function validate_category($id, $allowed_list)
+{
+
+  if (!in_array($id, $allowed_list)) {
+    return 'Указана несуществующая категория';
+  }
+
+  return null;
+}
+
+function validate_price($price)
+{
+  if (!$price) {
+    return null;
+  }
+
+  if (!is_bool($price) && $price < 0) {
+    return "Содержимое поля «начальная цена» должно быть числом больше нуля.";
+  }
+
+
+
+  return null;
+}
+
+function validate_date($date)
+{
+  if (!$date) {
+    return null;
+  }
+
+  if (!is_date_valid($date)) {
+    return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
+  }
+
+  $now = date_create("now");
+  $d = date_create($date);
+  $diff = date_diff($d, $now);
+  $interval = date_interval_format($diff, "%d");
+
+  if ($interval < 1) {
+    return "Дата должна быть больше текущей не менее чем на один день";
+  }
+
+  return null;
+}
+
+function validate_step($number)
+{
+  if (!$number) {
+    return null;
+  }
+
+  if (!is_int($number) && $number < 0) {
+    return "Содержимое поля «шаг ставки» должно быть целым числом больше нуля.";
+  }
+
+
+  return null;
 }

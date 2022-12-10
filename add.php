@@ -2,10 +2,6 @@
 
 require_once 'common/init.php';
 
-$content = include_template('add-lot.php', [
-  'categories' => $categories,
-]);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $categories_id = array_column($categories, "id");
   $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
@@ -68,21 +64,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 
   if (count($errors)) {
-    $content = include_template('add-lot.php', ['gif' => $gif, 'errors' => $errors, 'categories' => $categories]);
+    $content = include_template('add-lot.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
+  } else {
+    $lot = $_POST;
+
+
+    $sql = get_query_create_lot();
+    $stmt = db_get_prepare_stmt($link, $sql, $lot);
+    $res = mysqli_stmt_execute($stmt);
+
+    if ($res) {
+      $lot_id = mysqli_insert_id($link);
+
+      header("Location: lot.php?id=" . $lot_id);
+    }
   }
-
-  $lot = $_POST;
-
-
-  $sql = get_query_create_lot();
-  $stmt = db_get_prepare_stmt($link, $sql, $lot);
-  $res = mysqli_stmt_execute($stmt);
-
-  if ($res) {
-    $lot_id = mysqli_insert_id($link);
-
-    header("Location: lot.php?id=" . $lot_id);
-  }
+} else {
+  $content = include_template('add-lot.php', [
+    'categories' => $categories,
+  ]);
 }
 
 $layout_content = include_template('layout.php', [

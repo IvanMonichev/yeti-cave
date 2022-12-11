@@ -53,20 +53,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $file_type = finfo_file($finfo, $tmp_name);
 
-    if ($file_type !== "image/jpg" || $file_type !== "image/png") {
-      $errors['file'] = 'Допустимые форматы файлов: jpg, jpeg, png';
+    if ($file_type !== "image/jpg" && $file_type !== "image/png" && $file_type !== "image/jpeg") {
+      $errors['lot-image'] = 'Допустимые форматы файла: jpg, jpeg, png';
     } else {
+      $lot = $_POST;
       $lot['image'] = $filename;
       move_uploaded_file($tmp_name, 'uploads/' . $filename);
     }
   } else {
-    $errors['file'] = 'Вы не загрузили файл';
+    $errors['lot-image'] = 'Вы не загрузили файл';
   }
 
   if (count($errors)) {
     $content = include_template('add-lot.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
   } else {
-    $lot = $_POST;
+
 
 
     $sql = get_query_create_lot();

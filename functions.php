@@ -75,8 +75,8 @@ function get_lot_by_id($link, $id): bool|mysqli_result
 
 function get_query_create_lot(): string
 {
-  return 'INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
+  return 'INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id)' .
+            'VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
 }
 
 function validate_category($id, $allowed_list)
@@ -95,11 +95,13 @@ function validate_price($price)
     return null;
   }
 
-  if (!is_bool($price) && $price < 0) {
-    return "Содержимое поля «начальная цена» должно быть числом больше нуля.";
+  if (!is_numeric($price)) {
+    return "Содержимое поля «начальная цена» должно быть числом";
   }
 
-
+  if ($price <= 0) {
+    return "Содержимое поля «начальная цена» должно быть числом больше нуля";
+  }
 
   return null;
 }
@@ -114,12 +116,11 @@ function validate_date($date)
     return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
   }
 
-  $now = date_create("now");
-  $d = date_create($date);
-  $diff = date_diff($d, $now);
-  $interval = date_interval_format($diff, "%d");
+  $date_current = time();
+  $date_by_user = strtotime($date);
 
-  if ($interval < 1) {
+
+  if ($date_by_user < $date_current + 60 * 60 * 24) {
     return "Дата должна быть больше текущей не менее чем на один день";
   }
 
@@ -132,7 +133,7 @@ function validate_step($number)
     return null;
   }
 
-  if (!is_int($number) && $number < 0) {
+  if (!is_numeric($number) || $number < 0) {
     return "Содержимое поля «шаг ставки» должно быть целым числом больше нуля.";
   }
 

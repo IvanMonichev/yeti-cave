@@ -32,7 +32,7 @@
       <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
       <span class="form__error"><?= $errors["lot-message"] ?? " " ?></span>
     </div>
-    <div class="form__item form__item--file <?= isset($errors["file"]) ? "form__item--invalid" : ""; ?>">
+    <div class="form__item form__item--file <?= isset($errors["lot-image"]) ? "form__item--invalid" : ""; ?>">
       <label>Изображение <sup>*</sup></label>
       <div class="form__input-file">
         <input name="lot-image" class="visually-hidden" type="file" id="lot-img" value="">
@@ -40,6 +40,7 @@
           Добавить
         </label>
       </div>
+      <span class="form__error"><?= $errors["lot-image"]; ?></span>
     </div>
     <div class="form__container-three">
       <div class="form__item form__item--small <?= isset($errors["lot-rate"]) ? "form__item--invalid" : ""; ?>">

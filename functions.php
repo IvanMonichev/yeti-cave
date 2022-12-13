@@ -79,6 +79,17 @@ function get_query_create_lot(): string
             'VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
 }
 
+function create_user($link, $data): bool
+{
+  $password = password_hash($data['password'], PASSWORD_DEFAULT);
+
+  $sql = "INSERT INTO users (data_registration, email, user_name, user_password, contacts) VALUES (NOW(), ?, ?, ?, ?)";
+
+  $stmt = db_get_prepare_stmt($link, $sql, [$data['email'], $data['name'], $password, $data['message']]);
+
+  return mysqli_stmt_execute($stmt);
+}
+
 function validate_category($id, $allowed_list)
 {
 

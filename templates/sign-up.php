@@ -8,7 +8,7 @@
       <?php endforeach; ?>
     </ul>
   </nav>
-  <form class="form container form--invalid" action="https://echo.htmlacademy.ru" method="post" autocomplete="off"> <!-- form
+  <form class="form container form--invalid" action="../sign-up.php" method="post" autocomplete="off"> <!-- form
     --invalid -->
     <h2>Регистрация нового аккаунта</h2>
     <div class="form__item"> <!-- form__item--invalid -->

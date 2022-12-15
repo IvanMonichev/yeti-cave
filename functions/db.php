@@ -1,5 +1,4 @@
 <?php
-
 function get_formatted_price($price): string
 {
   $price = ceil($price);
@@ -25,27 +24,6 @@ function get_time_left($date)
   $res[] = $minutes;
 
   return $res;
-
-
-}
-
-function show_error($error_text): string
-{
-  return include_template('error.php', [
-    'error' => $error_text ?? mysqli_error(),
-  ]);
-}
-
-function get_categories($link)
-{
-  $sql_categories = 'SELECT * FROM categories';
-  $result_categories = mysqli_query($link, $sql_categories);
-  if ($result_categories) {
-    return mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
-  } else {
-    $error = mysqli_error($link);
-    show_error($error);
-  }
 
 }
 
@@ -76,7 +54,7 @@ function get_lot_by_id($link, $id): bool|mysqli_result
 function get_query_create_lot(): string
 {
   return 'INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id)' .
-            'VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
+    'VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
 }
 
 function create_user($link, $data): bool
@@ -90,64 +68,17 @@ function create_user($link, $data): bool
   return mysqli_stmt_execute($stmt);
 }
 
-function validate_category($id, $allowed_list)
+function get_categories($link)
 {
-
-  if (!in_array($id, $allowed_list)) {
-    return 'Указана несуществующая категория';
+  $sql_categories = 'SELECT * FROM categories';
+  $result_categories = mysqli_query($link, $sql_categories);
+  if ($result_categories) {
+    return mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
+  } else {
+    $error = mysqli_error($link);
+    show_error($error);
   }
 
-  return null;
 }
 
-function validate_price($price)
-{
-  if (!$price) {
-    return null;
-  }
 
-  if (!is_numeric($price)) {
-    return "Содержимое поля «начальная цена» должно быть числом";
-  }
-
-  if ($price <= 0) {
-    return "Содержимое поля «начальная цена» должно быть числом больше нуля";
-  }
-
-  return null;
-}
-
-function validate_date($date)
-{
-  if (!$date) {
-    return null;
-  }
-
-  if (!is_date_valid($date)) {
-    return "Содержимое поля «дата завершения» должно быть датой в формате «ГГГГ-ММ-ДД»";
-  }
-
-  $date_current = time();
-  $date_by_user = strtotime($date);
-
-
-  if ($date_by_user < $date_current + 60 * 60 * 24) {
-    return "Дата должна быть больше текущей не менее чем на один день";
-  }
-
-  return null;
-}
-
-function validate_step($number)
-{
-  if (!$number) {
-    return null;
-  }
-
-  if (!is_numeric($number) || $number < 0) {
-    return "Содержимое поля «шаг ставки» должно быть целым числом больше нуля.";
-  }
-
-
-  return null;
-}

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'common/init.php';
+require_once 'functions/validators.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $categories_id = array_column($categories, "id");

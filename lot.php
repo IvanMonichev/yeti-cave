@@ -1,7 +1,6 @@
 <?php
 require 'common/init.php';
-
-
+require_once 'functions/view.php';
 
 $id_lot = intval($_GET['id']);
 $arr = get_lot_by_id($link, $id_lot);

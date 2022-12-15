@@ -1,6 +1,6 @@
 <?php
 require_once 'helpers.php';
-require_once 'functions.php';
+require_once 'functions/db.php';
 require_once 'config/timezone.php';
 $db = require_once 'config/db.php';
 

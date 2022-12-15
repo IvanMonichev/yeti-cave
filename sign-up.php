@@ -1,35 +1,75 @@
 <?php
-require "common/init.php";
+require_once "common/init.php";
+require_once "functions/validators.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $form = $_POST;
   $errors = [];
 
-  $req_fields = ["email", "password", "name", "message"];
+  $required = ["email", "password", "name", "message"];
 
-  foreach ($req_fields as $field) {
-    if (empty($form[$field])) {
-      $errors = "Не заполнено поле " . $field;
+  $rules = [
+    "email" => function ($value) {
+      return validate_email($value);
+    }
+  ];
+
+  $user = filter_input_array(INPUT_POST,
+    [
+      "email" => FILTER_DEFAULT,
+      "password" => FILTER_DEFAULT,
+      "name" => FILTER_DEFAULT,
+      "message" => FILTER_DEFAULT,
+    ], true);
+
+
+  foreach ($user as $field => $value) {
+    if (isset($rules[$field])) {
+      $rule = $rules[$field];
+      $errors[$field] = $rule($value);
+    }
+
+    if (in_array($field, $required) && empty($value)) {
+      $errors[$field] = "Поле $field нужно заполнить";
     }
   }
 
-  if (empty($errors)) {
-    $email = mysqli_real_escape_string($link, $form["email"]);
+  $errors = array_filter($errors);
+
+  if (count($errors)) {
+    $content = include_template("sign-up.php", [
+      "categories" => $categories,
+      "user" => $user,
+      "errors" => $errors,
+    ]);
+  } else {
+    $user = $_POST;
+    $email = $user['email'];
     $sql = "SELECT id FROM users WHERE email = '$email'";
     $res = mysqli_query($link, $sql);
 
     if (mysqli_num_rows($res) > 0) {
-      $errors[] = "Пользователь с этим email уже зарегистрирован";
+      $errors["email"] = "Пользователь с этим email уже зарегистрирован";
+      $content = include_template("sign-up.php", [
+        "categories" => $categories,
+        "user" => $user,
+        "errors" => $errors,
+      ]);
     } else {
-
-      $res = create_user($link, $form);
+      $res = create_user($link, $user);
+      if ($res) {
+        $content = include_template("sign-up.php", [
+          "categories" => $categories,
+        ]);
+        $lot_id = mysqli_insert_id($link);
+        header("Location: /");
+      }
     }
   }
+} else {
+  $content = include_template("sign-up.php", [
+    "categories" => $categories,
+  ]);
 }
-
-$content = include_template("sign-up.php", [
-  "categories" => $categories
-]);
 
 $layout_content = include_template("layout.php", [
   "user_name" => $user_name,

@@ -39,19 +39,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
   if(!count($errors) and $user) {
-    if(password_verify($user["password"], $form["password"])) {
+    if(password_verify($form["password"], $user["user_password"])) {
       $_SESSION["user"] = $user;
     } else {
       $errors["password"] = "Неверный пароль";
     }
   } else {
-    $errors["email"] = "Пользователь не найден";
+    if (empty($errors["email"])) {
+      $errors["email"] = "Пользователь не найден";
+    }
   }
 
   if (count($errors)) {
     $content = include_template("sign-in.php", [
       "categories" => $categories,
-      "form" => $form,
+      "user" => $user,
       "errors" => $errors
     ]);
   }
@@ -61,6 +63,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     "categories" => $categories,
   ]);
 }
+
+$content = include_template("sign-in.php", [
+  "categories" => $categories,
+]);
 
 $layout_content = include_template("layout.php", [
   "user_name" => $user_name,

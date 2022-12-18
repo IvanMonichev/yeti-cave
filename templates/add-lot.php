@@ -14,7 +14,7 @@
       <div class="form__item <?= isset($errors["lot-name"]) ? "form__item--invalid" : ""; ?>">
         <label for="lot-name">Наименование <sup>*</sup></label>
         <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота">
-        <span class="form__error"><?= $errors["lot-name"] ?? " " ?></span>
+        <span class="form__error"><?= $errors["lot-name"] ?? "" ?></span>
       </div>
       <div class="form__item <?= isset($errors["category"]) ? "form__item--invalid" : ""; ?>">
         <label for="category">Категория <sup>*</sup></label>
@@ -24,13 +24,13 @@
             <option value="<?= $category['id'] ?>"><?= $category['name_category'] ?></option>
           <?php endforeach; ?>
         </select>
-        <span class="form__error"><?= $errors["category"] ?? " " ?></span>
+        <span class="form__error"><?= $errors["category"] ?? "" ?></span>
       </div>
     </div>
     <div class="form__item form__item--wide <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">
       <label for="message">Описание <sup>*</sup></label>
       <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
-      <span class="form__error"><?= $errors["lot-message"] ?? " " ?></span>
+      <span class="form__error"><?= $errors["lot-message"] ?? "" ?></span>
     </div>
     <div class="form__item form__item--file <?= isset($errors["lot-image"]) ? "form__item--invalid" : ""; ?>">
       <label>Изображение <sup>*</sup></label>

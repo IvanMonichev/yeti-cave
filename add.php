@@ -85,11 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   ]);
 }
 
-$layout_content = include_template('layout.php', [
-  'user_name' => $user_name,
-  'title' => $title,
-  'categories' => $categories,
-  'content' => $content,
-]);
+if (isset($_SESSION["user"])) {
+  $layout_content = include_template('layout.php', [
+    'title' => $title,
+    'categories' => $categories,
+    'content' => $content,
+  ]);
+  print($layout_content);
+} else {
+  header('HTTP/1.0 403 Forbidden', true, 403);
+  echo "Доступ запрещён. Код ошибки – 403.";
+}
 
-print($layout_content);
+
+

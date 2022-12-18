@@ -22,7 +22,6 @@ if ($result = get_lot_by_id($link, $id_lot)) {
 }
 
 $layout_content = include_template('layout.php', [
-  'user_name' => $user_name,
   'title' => $title,
   'categories' => $categories,
   'content' => $content,

@@ -56,23 +56,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       "user" => $user,
       "errors" => $errors
     ]);
+  } else {
+    header("Location: /index.php");
+    exit();
   }
 
 } else {
   $content = include_template("sign-in.php", [
     "categories" => $categories,
   ]);
+  if (isset($_SESSION["user"])) {
+    header("Location: /index.php");
+    exit();
+  }
 }
 
-$content = include_template("sign-in.php", [
-  "categories" => $categories,
-]);
 
 $layout_content = include_template("layout.php", [
-  "user_name" => $user_name,
   "title" => $title,
   "categories" => $categories,
   "content" => $content,
 ]);
-
 print($layout_content);
+
+

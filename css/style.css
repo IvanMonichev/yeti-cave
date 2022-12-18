@@ -263,6 +263,7 @@ main.container {
 .user-menu__logged p {
   font-weight: 700;
   margin: 0;
+  text-align: center;
 }
 
 .user-menu__logged a {
@@ -273,7 +274,8 @@ main.container {
 }
 
 .user-menu__logged a:last-child {
-  margin-left: 20px;
+  width: 100%;
+  text-align: center;
 }
 
 .user-menu__logged a:hover {

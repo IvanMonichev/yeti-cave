@@ -1,6 +1,5 @@
 <?php
 
-$user_name = "Иван";
 $title = "Главная | Yeti Cave";
 
 $categories = [

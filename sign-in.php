@@ -4,7 +4,7 @@ require_once "functions/validators.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $errors = [];
-  $required = ["email", "password", "name", "message"];
+  $required = ["email", "password"];
 
   $rules = [
     "email" => function ($value) {
@@ -16,8 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     [
       "email" => FILTER_DEFAULT,
       "password" => FILTER_DEFAULT,
-      "name" => FILTER_DEFAULT,
-      "message" => FILTER_DEFAULT,
     ], true);
 
 
@@ -34,38 +32,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $errors = array_filter($errors);
 
-  if (count($errors)) {
-    $content = include_template("sign-up.php", [
-      "categories" => $categories,
-      "user" => $user,
-      "errors" => $errors,
-    ]);
-  } else {
-    $user = $_POST;
-    $email = $user['email'];
-    $sql = "SELECT id FROM users WHERE email = '$email'";
-    $res = mysqli_query($link, $sql);
+  $form = $_POST;
+  $email = mysqli_real_escape_string($link, $form["email"]);
+  $sql = "SELECT * FROM users WHERE email = '$email'";
+  $res = mysqli_query($link, $sql);
+  $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-    if (mysqli_num_rows($res) > 0) {
-      $errors["email"] = "Пользователь с этим email уже зарегистрирован";
-      $content = include_template("sign-up.php", [
-        "categories" => $categories,
-        "user" => $user,
-        "errors" => $errors,
-      ]);
+  if(!count($errors) and $user) {
+    if(password_verify($user["password"], $form["password"])) {
+      $_SESSION["user"] = $user;
     } else {
-      $res = create_user($link, $user);
-      if ($res) {
-        $content = include_template("sign-up.php", [
-          "categories" => $categories,
-        ]);
-        $lot_id = mysqli_insert_id($link);
-        header("Location: /");
-      }
+      $errors["password"] = "Неверный пароль";
     }
+  } else {
+    $errors["email"] = "Пользователь не найден";
   }
+
+  if (count($errors)) {
+    $content = include_template("sign-in.php", [
+      "categories" => $categories,
+      "form" => $form,
+      "errors" => $errors
+    ]);
+  }
+
 } else {
-  $content = include_template("sign-up.php", [
+  $content = include_template("sign-in.php", [
     "categories" => $categories,
   ]);
 }

@@ -27,6 +27,8 @@ function get_time_left($date)
 
 }
 
+// function search_lots($link, $query)
+
 function get_lots($link)
 {
   $sql_lots =

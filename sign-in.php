@@ -71,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 
-
 $layout_content = include_template("layout.php", [
   "title" => $title,
   "categories" => $categories,

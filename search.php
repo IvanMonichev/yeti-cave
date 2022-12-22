@@ -1,19 +1,29 @@
 <?php
 require_once "common/init.php";
 
-$search = $_GET["search"] ?? "";
+$query = trim($_GET["search"] ?? "");
+$query = htmlspecialchars($query);
 
-if ($search) {
-  $sql = "SELECT "
+if ($query) {
+  $goods = get_found_lots($link, $query);
+
+  $content = include_template("search.php", [
+    "categories" => $categories,
+    "goods" => $goods,
+    "query" => $query,
+  ]);
+
+} else {
+  $content = include_template("search.php", [
+    "categories" => $categories,
+    "query" => $query,
+  ]);
 }
-
-$content = include_template("search.php", [
-  "categories" => $categories,
-]);
 
 $layout_content = include_template("layout.php", [
   "title" => $title,
   "categories" => $categories,
   "content" => $content,
+  "query" => $query,
 ]);
 print($layout_content);

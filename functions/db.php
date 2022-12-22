@@ -27,7 +27,20 @@ function get_time_left($date)
 
 }
 
-// function search_lots($link, $query)
+function get_found_lots($link, $query)
+{
+  $sql =
+    "SELECT l.id, l.lot_name as name, l.start_price as price, l.data_finish as expiration,
+            l.image, c.name_category as category
+        FROM lots l JOIN categories c on l.category_id = c.id
+        WHERE MATCH(lot_name, lot_description) AGAINST(?)";
+
+  $stmt = mysqli_prepare($link, $sql);
+  mysqli_stmt_bind_param($stmt, 's', $query);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
 
 function get_lots($link)
 {

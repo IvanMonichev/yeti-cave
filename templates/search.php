@@ -44,13 +44,18 @@
       </ul>
       <?php endif; ?>
     </section>
-    <ul class="pagination-list">
-      <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-      <li class="pagination-item pagination-item-active"><a>1</a></li>
-      <li class="pagination-item"><a href="#">2</a></li>
-      <li class="pagination-item"><a href="#">3</a></li>
-      <li class="pagination-item"><a href="#">4</a></li>
-      <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
-    </ul>
+      <ul class="pagination-list">
+        <li class="pagination-item pagination-item-prev">
+          <a href="search.php?search=<?= $query; ?><?= $current_page > 1 ? "&page=" . $current_page - 1 : ""?>">Назад</a>
+        </li>
+        <?php foreach ($pages as $page): ?>
+          <li class="pagination-item <?= $current_page === $page ? "pagination-item-active" : "" ?>">
+            <a href="search.php?search=<?= $query; ?>&page=<?= $page; ?>"><?= $page; ?></a>
+          </li>
+        <?php endforeach; ?>
+        <li class="pagination-item pagination-item-next">
+          <a href="search.php?search=<?= $query; ?>&page=<?= $current_page < $page_count ? $current_page + 1 : $page_count?>">Вперед</a>
+        </li>
+      </ul>
   </div>
 </main>

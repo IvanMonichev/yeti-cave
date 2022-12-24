@@ -6,7 +6,6 @@ function get_formatted_price($price): string
   return $price . ' <b class="rub">р</b>';
 }
 
-
 function get_time_left($date)
 {
   $final_date = date_create($date);
@@ -106,5 +105,4 @@ function get_categories($link)
   }
 
 }
-
 

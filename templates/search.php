@@ -44,6 +44,7 @@
       </ul>
       <?php endif; ?>
     </section>
+    <?php if($page_count > 1): ?>
       <ul class="pagination-list">
         <li class="pagination-item pagination-item-prev">
           <a href="search.php?search=<?= $query; ?><?= $current_page > 1 ? "&page=" . $current_page - 1 : ""?>">Назад</a>
@@ -57,5 +58,6 @@
           <a href="search.php?search=<?= $query; ?>&page=<?= $current_page < $page_count ? $current_page + 1 : $page_count?>">Вперед</a>
         </li>
       </ul>
+    <?php endif; ?>
   </div>
 </main>

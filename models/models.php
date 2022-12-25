@@ -3,7 +3,7 @@ function get_formatted_price($price): string
 {
   $price = ceil($price);
   $price = number_format($price, 0, ',', ' ');
-  return $price . ' <b class="rub">р</b>';
+  return $price . ' ₽';
 }
 
 function get_time_left($date)
@@ -66,7 +66,7 @@ function get_lots($link)
 function get_lot_by_id($link, $id): bool|mysqli_result
 {
   $sql_lot = 'SELECT l.id, l.data_creation, l.lot_name as name, l.image, l.lot_description as description,
-                l.start_price as price, l.data_finish as expiration, c.name_category as category
+                l.start_price as price, l.data_finish as expiration, l.step, c.name_category as category
                 FROM lots l JOIN categories c on l.category_id = c.id WHERE l.id = ?;';
 
   $stmt = mysqli_prepare($link, $sql_lot);
@@ -106,3 +106,29 @@ function get_categories($link)
 
 }
 
+function create_bet($link, $data): bool
+{
+  $sql = "INSERT INtO bets (date_bet, price_bet, user_id, lot_id) VALUES (NOW(), ?, ?, ?)";
+  $stmt = mysqli_prepare($link, $sql);
+  mysqli_stmt_bind_param($stmt, 'iii', $data["cost"], $data["user_id"], $data["lot_id"]);
+  mysqli_stmt_execute($stmt);
+  return mysqli_stmt_get_result($stmt);
+}
+
+function get_bets($link, $id)
+{
+  $sql = "SELECT 
+            DATE_FORMAT(date_bet, '%d.%m.%y %H:%i'), b.price_bet, 
+            l.lot_name, l.lot_description, l.image, l.data_finish, l.id, c.name_category
+            FROM bets b 
+                JOIN lots l on l.id = b.lot_id
+                JOIN categories c on c.id = l.category_id
+            WHERE b.user_id = ?
+            ORDER BY b.date_bet DESC;";
+
+  $stmt = mysqli_prepare($link, $sql);
+  mysqli_stmt_bind_param($stmt, 'i', $id);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}

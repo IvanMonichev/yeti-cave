@@ -12,7 +12,7 @@
   <header class="main-header">
     <div class="main-header__container container">
       <h1 class="visually-hidden">YetiCave</h1>
-      <a class="main-header__logo" href="/">
+      <a class="main-header__logo" href="/index.php">
         <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
       </a>
       <form class="main-header__search" method="get" action="../search.php" autocomplete="off">
@@ -27,6 +27,7 @@
         <?php if (isset($_SESSION["user"])): ?>
           <div class="user-menu__logged">
             <p><?= $_SESSION["user"]["user_name"]; ?></p>
+            <a href="/my-bets.php">Мои ставки</a>
             <a href="/logout.php">Выйти</a>
           </div>
         <?php else: ?>
@@ -58,7 +59,7 @@
   </nav>
   <div class="main-footer__bottom container">
     <div class="main-footer__copyright">
-      <p>© 2019, YetiCave</p>
+      <p>© <?= date('Y'); ?>, Ivan Monichev</p>
       <p>Интернет-аукцион сноубордического и горнолыжного снаряжения</p>
     </div>
     <div class="main-footer__social social">
@@ -114,7 +115,7 @@
   </div>
 </footer>
 
-<!--<script src="flatpickr.js"></script>-->
+<script src="flatpickr.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

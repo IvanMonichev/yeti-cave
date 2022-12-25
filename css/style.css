@@ -258,6 +258,9 @@ main.container {
 .user-menu__logged {
   color: #879296;
   line-height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .user-menu__logged p {

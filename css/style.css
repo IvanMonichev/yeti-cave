@@ -167,6 +167,7 @@ main.container {
   -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
   justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .main-header__logo {

@@ -66,7 +66,7 @@ function get_lots($link)
 function get_lot_by_id($link, $id): bool|mysqli_result
 {
   $sql_lot = 'SELECT l.id, l.data_creation, l.lot_name as name, l.image, l.lot_description as description,
-                l.start_price as price, l.data_finish as expiration, l.step, c.name_category as category
+                l.start_price as price, l.data_finish as expiration, l.step, c.name_category as category, l.user_id
                 FROM lots l JOIN categories c on l.category_id = c.id WHERE l.id = ?;';
 
   $stmt = mysqli_prepare($link, $sql_lot);
@@ -76,10 +76,10 @@ function get_lot_by_id($link, $id): bool|mysqli_result
   return mysqli_stmt_get_result($stmt);
 }
 
-function get_query_create_lot(): string
+function get_query_create_lot($user): string
 {
-  return 'INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id)' .
-    'VALUES (?, ?, ?, ?, ?, ?, ?, 1)';
+  return "INSERT INTO lots (lot_name, category_id, lot_description, start_price, step, data_finish, image, user_id)" .
+    "VALUES (?, ?, ?, ?, ?, ?, ?, $user)";
 }
 
 function create_user($link, $data): bool

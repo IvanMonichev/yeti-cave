@@ -55,6 +55,18 @@ if (isset($_SESSION["user"])) {
       $errors["cost"] = "Минимальная ставка – $min_bet!";
     }
 
+    echo "<pre>";
+    var_dump($_SESSION["user"]["id"]);
+    echo "</pre>";
+
+    echo "<pre>";
+    var_dump($lot["user_id"]);
+    echo "</pre>";
+
+    if ($_SESSION["user"]["id"] == $lot["user_id"]) {
+      $errors["cost"] = "Данный лот создан вами";
+    }
+
     $errors = array_filter($errors);
 
     if (count($errors)) {

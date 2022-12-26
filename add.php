@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (count($errors)) {
     $content = include_template('add-lot.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
   } else {
-
-    $sql = get_query_create_lot();
+    $user = $_SESSION["user"]["id"];
+    $sql = get_query_create_lot($user);
     $stmt = db_get_prepare_stmt($link, $sql, $lot);
     $res = mysqli_stmt_execute($stmt);
 
